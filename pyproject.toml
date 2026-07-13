@@ -1,0 +1,17 @@
+[project]
+name = "task-manager-api"
+version = "0.1.0"
+description = "A task-manager CLI tool for practicing backend fundamentals."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi[standard-no-fastapi-cloud-cli]>=0.139.0",
+]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pytest>=9.1.1",
+    "ruff>=0.15.21",
+    "ty>=0.0.59",
+]
