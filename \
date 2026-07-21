@@ -1,2 +1,0 @@
-APPLICATION_DATABASE_URL="postgres://application_service:password@localhost:5432/tmdb"
-MIGRATION_DATABASE_URL="postgres://migration_service:password@localhost:5432/tmdb"
