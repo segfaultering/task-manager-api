@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime as dt
 
 from sqlalchemy import (
     func,
@@ -33,7 +33,7 @@ class User(Base):
         server_default=text("FALSE"), 
         nullable=False
     )
-    created_at: Mapped[datetime.datetime] = mapped_column(
+    created_at: Mapped[dt.datetime] = mapped_column(
         DateTime, 
         server_default=func.current_timestamp(), 
         nullable=False
@@ -42,7 +42,7 @@ class User(Base):
     __table_args__ = (
         PrimaryKeyConstraint("id", name="pk_user"),
         UniqueConstraint("username", "email", name="uq_user_email_username"),
-        CheckConstraint("username", "username ~ ^[A-Za-z0-9._]+$", name="ck_users_valid_username"),
-        CheckConstraint("username", "length(username) >= 8"),
-        CheckConstraint("email", "email ~ ^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$", name="ck_email_valid_email")
+        CheckConstraint("username ~ \'^[A-Za-z0-9._]+$\'", name="ck_user_valid_username"),
+        CheckConstraint("length(username) >= 8", name="ck_users_username_minlength"),
+        CheckConstraint("email ~* \'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$\'" , name="ck_email_valid_email")
     )
