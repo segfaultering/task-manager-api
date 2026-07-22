@@ -11,9 +11,10 @@ def create_user(username, session):
     
     return UserResponse(id=user.id, username=user.username)
 
-def get_user(id, session):
+def return_user(id, session):
     with session.begin():
-        user = session.scalars(select(User).where(User.c.id == id))
+        user = session.scalars(select(User).where(User.id == id)).one()
+
     
     return UserResponse(id=user.id, username=user.username)
 

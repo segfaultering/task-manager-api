@@ -2,10 +2,9 @@ from sqlalchemy import (
     Identity,
     Integer,
     Text,
-    Mapped,
-    mapped_column
     PrimaryKeyConstraint
 )
+from sqlalchemy.orm import Mapped, mapped_column
 
 from task_manager_api.database import Base
 
@@ -17,4 +16,6 @@ class User(Base):
     id: Mapped[int] = mapped_column(Integer, Identity(start=1, increment=1))
     username: Mapped[str] = mapped_column(Text, nullable=False)
 
-    PrimaryKeyConstraint("id", name="pk_user")
+    __table_args__ = (
+        PrimaryKeyConstraint("id", name="pk_user"),
+    )

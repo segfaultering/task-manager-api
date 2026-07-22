@@ -7,6 +7,6 @@ from task_manager_api.config import settings
 class Base(DeclarativeBase):
     pass
 
-engine = create_engine(settings.app_db_url, echo=True)
+engine = create_engine(settings.app_db_url.encoded_string(), echo=True)
 
 SessionLocal = sessionmaker(engine, expire_on_commit=False)
