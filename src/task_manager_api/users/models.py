@@ -44,5 +44,5 @@ class User(Base):
         UniqueConstraint("username", "email", name="uq_user_email_username"),
         CheckConstraint("username ~ \'^[A-Za-z0-9._]+$\'", name="ck_user_valid_username"),
         CheckConstraint("length(username) >= 8", name="ck_users_username_minlength"),
-        CheckConstraint("email ~* \'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$\'" , name="ck_email_valid_email")
+        CheckConstraint("email ~* \'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$\'" , name="ck_email_valid_email")
     )
