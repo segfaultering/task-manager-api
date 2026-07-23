@@ -33,14 +33,16 @@ class UserCreate(BaseModel):
         return passwd
          
     @field_validator("username", mode="after")
-    @property
+    @classmethod
     def is_valid_username(cls, username: str) -> str:
         valid_chars = string.ascii_letters + string.digits + "_."
+        valid = len(set(username)) == len((set(username) & set(valid_chars)))
 
-        if not (username in valid_chars):
+        if not valid:
             raise ValueError(f"{username} is not a valid username!")
 
         return username
+
 
 class UserResponse(BaseModel):
     id: PositiveInt
@@ -51,11 +53,13 @@ class UserResponse(BaseModel):
 
     
     @field_validator("username", mode="after")
-    @property
+    @classmethod
     def is_valid_username(cls, username: str) -> str:
         valid_chars = string.ascii_letters + string.digits + "_."
+        valid = len(set(username)) == len((set(username) & set(valid_chars)))
 
-        if not (username in valid_chars):
+        if not valid:
             raise ValueError(f"{username} is not a valid username!")
 
         return username
+
