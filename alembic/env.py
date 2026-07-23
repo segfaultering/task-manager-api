@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 from task_manager_api.database import Base
 from task_manager_api.config import settings
-from task_manager_api.users.models import User
+from task_manager_api.users.models import User #noqa: F401
 
 load_dotenv()
 
