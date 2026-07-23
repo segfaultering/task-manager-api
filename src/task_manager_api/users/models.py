@@ -19,7 +19,7 @@ from task_manager_api.database import Base
 
 class User(Base):
 
-    __tablename__="user"
+    __tablename__ = "user"
      
     id: Mapped[int] = mapped_column(
         Integer, 

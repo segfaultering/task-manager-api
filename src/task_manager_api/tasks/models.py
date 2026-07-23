@@ -33,16 +33,14 @@ class Task(Base):
         Integer, 
         Identity(always=True, start=1, increment=1)
     )
-    user_id: Mapped[int] = mapped_column() 
+    user_id: Mapped[int] = mapped_column(Integer) 
     name: Mapped[str] = mapped_column(Text, nullable=False)
     description: Mapped[str | None] = mapped_column(Text)
-    status: Mapped[Status] = mapped_column(
+    stat: Mapped[Status] = mapped_column(
         Enum(
             Status, 
-            create_type=False, 
             values_callable=lambda x: [i.value for i in x]
         ), 
-        server_default=text(Status.ONGOING.value),
         nullable=False
     )
     created_at: Mapped[dt.datetime] = mapped_column(
@@ -54,8 +52,8 @@ class Task(Base):
     __table_args__ = (
         PrimaryKeyConstraint("id", name="pk_task"),
         ForeignKeyConstraint(
-            "user_id", 
-            "user.id", 
+            ["user_id"], 
+            ["user.id"], 
             name="fk_task_user", 
             onupdate="RESTRICT", 
             ondelete="CASCADE"
