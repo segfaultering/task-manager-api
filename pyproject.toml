@@ -13,6 +13,7 @@ dependencies = [
     "email-validator>=2.3.0",
     "fastapi[standard-no-fastapi-cloud-cli]>=0.139.0",
     "psycopg[binary]>=3.3.4",
+    "pwdlib[argon2]>=0.3.0",
     "pydantic-settings>=2.14.2",
     "python-dotenv>=1.2.2",
     "sqlalchemy>=2.0.51",
