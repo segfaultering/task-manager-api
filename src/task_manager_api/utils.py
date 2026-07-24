@@ -12,4 +12,6 @@ def hash_password(password: str) -> str:
     hasher = PasswordHash((Argon2Hasher(),))
     return hasher.hash(password)
 
-      
+def get_current_user_id():
+    # Dummy implementation 
+    return 8

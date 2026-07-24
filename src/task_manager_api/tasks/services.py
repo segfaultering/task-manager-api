@@ -1,20 +1,15 @@
 from typing import Protocol
-from collections.abc import Iterable
 
 from sqlalchemy import select
-import sqlalchemy.orm.Session as DBSession
-from pydantic import BaseModel
+import sqlalchemy.orm as orm
 
 from task_manager_api.tasks.schemas import (
     Create, 
     Update, 
-    Delete, 
     Representation,
     TaskCreate, 
     TaskUpdate,
-    TaskDelete,
-    TaskRepr,
-    TaskResp
+    TaskRepr
 )
 from task_manager_api.tasks.models import Task
 
@@ -26,7 +21,7 @@ class Service(Protocol):
     def read(self, id_: int) -> Representation: 
         ...
 
-    def read(self) -> list[Representation]: 
+    def read_all(self) -> list[Representation]: 
         ...
 
     def update(self, id_: int, payload: Update) -> Representation: 
@@ -37,7 +32,7 @@ class Service(Protocol):
 
 
 class TaskService:
-    def __init__(self, session: DBSession, curr_user_id: int) -> None:
+    def __init__(self, session: orm.Session, curr_user_id: int) -> None:
         self.session = session 
         self.user_id = curr_user_id 
     
@@ -68,11 +63,11 @@ class TaskService:
  
         return TaskRepr.model_validate(task)
 
-    def read(self) -> list[TaskRepr]:
+    def read_all(self) -> list[TaskRepr]:
         with self.session.begin() as session:
             stmt = (
                 select(Task)
-                .where(Task.user_id = self.user_id)
+                .where(Task.user_id == self.user_id)
             )
 
             tasks = session.scalars(stmt).all()
@@ -117,7 +112,7 @@ class TaskService:
             task = session.scalars(stmt).one()
             session.delete(task)
 
-        
+          
 
 
 
