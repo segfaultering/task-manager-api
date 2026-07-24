@@ -18,7 +18,7 @@ def is_valid_task_name(task_name: str | None) -> str | None:
     if not task_name:
         return None
 
-    valid_chars = string.ascii_letters + string.digits 
+    valid_chars = string.ascii_letters + string.digits + " "
     valid = (len(set(task_name)) == len(set(task_name) & set(valid_chars)))
 
     if not valid:

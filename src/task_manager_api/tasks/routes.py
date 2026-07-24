@@ -13,7 +13,7 @@ from task_manager_api.tasks.services import TaskService
 from task_manager_api.utils import get_session, get_current_user_id
 
 
-router = APIRouter(prefix="/tasks/")
+router = APIRouter(prefix="/tasks")
 DBSession = Annotated[
     sqlalchemy.orm.Session,
     Depends(get_session)
@@ -38,14 +38,14 @@ def post_task(payload: TaskCreate, session: DBSession, id_: CurrUserId) -> TaskR
 
 @router.get(
     "/",
-    response_model=TaskResp,
+    response_model=list[TaskResp],
     status_code=status.HTTP_200_OK
 )
-def get_tasks(session: DBSession, user_id: CurrUserId) -> TaskRepr:
+def get_tasks(session: DBSession, user_id: CurrUserId) -> list[TaskRepr]:
     service = TaskService(session, user_id)
-    task_repr = service.read_all()
+    task_reprs = service.read_all()
 
-    return task_repr
+    return task_reprs
 
 
 @router.get(
@@ -79,5 +79,5 @@ def patch_task(id_: int, payload: TaskUpdate, session: DBSession, user_id: CurrU
 )
 def delete_task(id_: int, session: DBSession, user_id: CurrUserId) -> None:
     service = TaskService(session, user_id)
-    task_repr = service.delete(id_)
+    service.delete(id_)
 

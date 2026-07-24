@@ -38,16 +38,16 @@ def update_user(id, payload, dbsession):
     with dbsession.begin():
         user = dbsession.scalars(select(User).where(User.id == id)).one()
         
-        if not payload.email is None:
+        if payload.email is not None:
             user.email = payload.email 
 
-        if not payload.username is None:
+        if payload.username is not None:
             user.username = payload.username
 
-        if not payload.admin is None:
+        if payload.admin is not None:
             user.admin = payload.admin
 
-        if not payload.password is None:
+        if payload.password is not None:
             user.hashed_password = hash_password(payload.password)  
 
     return model_to_response(user)

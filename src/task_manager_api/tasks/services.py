@@ -11,7 +11,7 @@ from task_manager_api.tasks.schemas import (
     TaskUpdate,
     TaskRepr
 )
-from task_manager_api.tasks.models import Task
+from task_manager_api.tasks.models import Task, Status
 
 
 class Service(Protocol):
@@ -37,20 +37,21 @@ class TaskService:
         self.user_id = curr_user_id 
     
     def create(self, payload: TaskCreate) -> TaskRepr:
-        with self.session.begin() as session:
+        with self.session.begin():
             task = Task(
                 user_id=self.user_id,
                 name=payload.name,
-                description=payload.description
+                description=payload.description,
+                stat=Status.ONGOING.value
             )
 
-            session.add(task)
+            self.session.add(task)
 
         return TaskRepr.model_validate(task)
             
     def read(self, id_: int) -> TaskRepr:
         # I should test out what inputting invalid ids will result in in terms of an error
-        with self.session.begin() as session:
+        with self.session.begin():
             stmt = (
                 select(Task)
                 .where(
@@ -59,24 +60,24 @@ class TaskService:
                 )
             )
 
-            task = session.scalars(stmt).one()
+            task = self.session.scalars(stmt).one()
  
         return TaskRepr.model_validate(task)
 
     def read_all(self) -> list[TaskRepr]:
-        with self.session.begin() as session:
+        with self.session.begin():
             stmt = (
                 select(Task)
                 .where(Task.user_id == self.user_id)
             )
 
-            tasks = session.scalars(stmt).all()
+            tasks = self.session.scalars(stmt).all()
 
         return [TaskRepr.model_validate(task) for task in tasks]
 
 
     def update(self, id_: int, payload: TaskUpdate) -> TaskRepr:
-        with self.session.begin() as session:
+        with self.session.begin():
             stmt = (
                 select(Task)
                 .where(
@@ -85,7 +86,7 @@ class TaskService:
                 )
             )
 
-            task = session.scalars(stmt).one()
+            task = self.session.scalars(stmt).one()
 
             if payload.name:
                 task.name = payload.name
@@ -100,7 +101,7 @@ class TaskService:
 
 
     def delete(self, id_: int) -> None:
-        with self.session.begin() as session:
+        with self.session.begin():
             stmt = (
                 select(Task)
                 .where(
@@ -109,8 +110,8 @@ class TaskService:
                 )
             )
 
-            task = session.scalars(stmt).one()
-            session.delete(task)
+            task = self.session.scalars(stmt).one()
+            self.session.delete(task)
 
           
 
