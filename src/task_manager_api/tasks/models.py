@@ -2,7 +2,6 @@ import datetime as dt
 import enum
 
 from sqlalchemy import (
-    text,
     func,
     Integer,
     Identity,
@@ -60,7 +59,6 @@ class Task(Base):
         ),
         UniqueConstraint("name", name="uq_task_name"),
         CheckConstraint("length(name) BETWEEN 8 AND 32", name="ck_task_user_username_minlength"),
-        CheckConstraint("name ~* \'^[A-Za-z0-9._]+$\'", name="ck_task_user_valid_taskname"),
         CheckConstraint("length(description) >= 8")
     )
 
