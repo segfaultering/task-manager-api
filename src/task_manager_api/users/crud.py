@@ -26,8 +26,43 @@ def return_user(id, dbsession):
 
     return model_to_response(user) 
 
+
 def return_users(dbsession):
     with dbsession.begin():
         users = dbsession.scalars(select(User)).all()
 
     return [model_to_response(user) for user in users]
+
+
+def update_user(id, payload, dbsession):
+    with dbsession.begin():
+        user = dbsession.scalars(select(User).where(User.id == id)).one()
+        
+        if not payload.email is None:
+            user.email = payload.email 
+
+        if not payload.username is None:
+            user.username = payload.username
+
+        if not payload.admin is None:
+            user.admin = payload.admin
+
+        if not payload.password is None:
+            user.hashed_password = hash_password(payload.password)  
+
+    return model_to_response(user)
+
+
+def delete_user(id, dbsession):
+    with dbsession.begin():
+        user = dbsession.scalars(select(User).where(User.id == id)).one()
+        
+        if not user:
+            raise ValueError(f"user: {id}, to be deleted does not exist!")
+
+        dbsession.delete(user)
+
+     
+
+
+
